@@ -1,0 +1,404 @@
+.fretboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 137.8vw;
+  height: 40vh;
+  color: black;
+  background-color: rgb(40, 6, 6);
+  box-shadow: 0 36px 92px rgba(0, 0, 0, 0.6);
+  top: 32%;
+}
+
+.fretboard-container {
+  position: absolute;
+  width: 100%;
+  height: 72px;
+  top: 125.57px;
+}
+
+.string {
+  display: flex;
+  border-radius: 30%;
+  width: 100%;
+  height: 5.5px;
+  background-color: rgb(137, 137, 137);
+  color: rgb(59, 59, 59);
+  margin: 8px;
+  z-index: 2;
+  background: linear-gradient(145deg, #646464, #8b8b8b);
+  box-shadow: inset 2px 6px 0px rgba(0, 0, 0, 0.2),
+    0px -5px 7px rgba(0, 0, 0, 1.2);
+  color: rgb(59, 59, 59);
+}
+
+.frets-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.fret {
+  border-right: 1px solid #ccc;
+  height: 40vh;
+  width: 12px;
+  background: linear-gradient(145deg, #474747, #616161);
+  position: absolute;
+  top: 95px;
+  z-index: 2;
+  box-shadow: inset 6px 7px 3px rgb(235 235 235), 0 0 179px rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+}
+
+/* Individal fret placement */
+
+.fret-1 {
+  left: -5.5%;
+  width: 110px;
+  background-color: #262626;
+  z-index: 3;
+  border-radius: 0;
+  background: linear-gradient(145deg, #353535, #2c2c2c);
+  box-shadow: inset 0px -1px 0px rgba(0, 7, 0, 0.2),
+    0px 7px 26px rgba(0, 0, 0, 0.3);
+  border: none;
+}
+.fret-2 {
+  left: 11rem;
+}
+.fret-3 {
+  left: 20rem;
+}
+.fret-4 {
+  left: 28.5rem;
+}
+.fret-5 {
+  left: 36.5rem;
+}
+.fret-6 {
+  left: 43.8rem;
+}
+.fret-7 {
+  left: 50rem;
+}
+.fret-8 {
+  left: 56rem;
+}
+.fret-9 {
+  left: 62rem;
+}
+.fret-10 {
+  left: 68rem;
+}
+.fret-11 {
+  left: 74rem;
+}
+.fret-12 {
+  left: 80rem;
+}
+.fret-13 {
+  left: 86rem;
+}
+.fret-14 {
+  left: 91rem;
+}
+.fret-15 {
+  left: 96rem;
+}
+.fret-16 {
+  left: 100rem;
+}
+.fret-17 {
+  left: 104rem;
+}
+.fret-18 {
+  left: 108rem;
+}
+.fret-19 {
+  left: 112rem;
+}
+.fret-20 {
+  left: 116rem;
+}
+.fret-21 {
+  left: 119rem;
+}
+.fret-22 {
+  left: 122rem;
+}
+.fret-23 {
+  left: 125rem;
+}
+.fret-24 {
+  left: 128rem;
+}
+
+.fret-25 {
+  left: 131rem;
+}
+
+/* Marker placement */
+
+.markers {
+  height: 1rem;
+  width: 1rem;
+  border-radius: 100%;
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, white, #ddd);
+  width: 36px;
+  height: 36px;
+  border: 2px solid #333;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.marker-1 {
+  top: 13.4rem;
+  left: 376px;
+}
+
+.marker-2 {
+  top: 13.4rem;
+  left: 39.35rem;
+}
+
+.marker-3 {
+  top: 13.4rem;
+  left: 52.2rem;
+}
+
+.marker-4 {
+  top: 13.4rem;
+  left: 64.2rem;
+}
+
+.marker-5 {
+  top: 8.6rem;
+  left: 82.2rem;
+}
+
+.marker-6 {
+  top: 18.25rem;
+  left: 82.2rem;
+}
+
+.marker-7 {
+  top: 13.4rem;
+  left: 97.2rem;
+}
+
+.marker-8 {
+  top: 13.4rem;
+  left: 105.2rem;
+}
+
+.marker-9 {
+  top: 13.4rem;
+  left: 113.2rem;
+}
+
+.marker-10 {
+  top: 13.4rem;
+  left: 119.67rem;
+}
+
+.dot {
+  position: absolute;
+  background: linear-gradient(to bottom, #001f3f, #0e4d92);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 102, 255, 0.9), 0 0px rgba(0, 102, 255, 0.8);
+  border: 1px solid #1971af;
+  transform: translate(-50%, -50%);
+  transition: background 1s ease, box-shadow 1s ease;
+  width: 40px;
+  height: 40px;
+  top: 42%;
+  left: 7%;
+}
+
+.dot:hover {
+  background: linear-gradient(
+    to bottom,
+    rgba(9, 69, 124, 0.7),
+    rgba(255, 255, 255, 0.7)
+  );
+  box-shadow: 0 0 10px rgba(0, 153, 255, 1), 0 0 10px rgba(0, 153, 255, 0.7);
+  z-index: 1;
+}
+
+/* Boundary styles and positioning */
+
+.boundary {
+  position: absolute;
+  width: 147px;
+  height: 23px;
+  background-color: rgba(transparent, 98, 184, 0.8);
+  z-index: 7;
+  transform: translate(27px, 282px);
+  transition: background-color 2s ease, box-shadow 2s ease;
+  box-shadow: none;
+}
+
+.boundary:hover {
+  background: linear-gradient(rgba(193, 193, 193, 0.2), rgb(22, 96, 187, 0.2));
+  box-shadow: 0 0 10px rgba(243, 243, 243, 0.8),
+    0 0 15px rgba(189, 193, 197, 0.6), 0 0 45px rgba(5, 98, 184, 0.8);
+  border-radius: 20%;
+}
+
+.boundary-0 {
+  top: 199.5px;
+  left: 1.5px;
+  width: 143px;
+  height: 14px;
+}
+.boundary-1 {
+  top: 199.5px;
+  left: 163px;
+  width: 126px;
+  height: 14px;
+}
+.boundary-2 {
+  top: 199.5px;
+  left: 308px;
+  width: 117px;
+  height: 14px;
+}
+.boundary-3 {
+  top: 199.5px;
+  left: 443px;
+  width: 110px;
+  height: 14px;
+}
+.boundary-4 {
+  top: 199.5px;
+  left: 573px;
+  width: 96px;
+  height: 14px;
+}
+.boundary-5 {
+  top: 199.5px;
+  left: 688px;
+  width: 81px;
+  height: 14px;
+}
+.boundary-6 {
+  top: 199.5px;
+  left: 787px;
+  width: 78px;
+  height: 14px;
+}
+.boundary-7 {
+  top: 199.5px;
+  left: 884px;
+  width: 76px;
+  height: 14px;
+}
+.boundary-8 {
+  top: 199.5px;
+  left: 979px;
+  width: 78px;
+  height: 14px;
+}
+.boundary-9 {
+  top: 199.5px;
+  left: 1076px;
+  width: 77px;
+  height: 14px;
+}
+.boundary-10 {
+  top: 199.5px;
+  left: 1173px;
+  width: 75.5px;
+  height: 14px;
+}
+.boundary-11 {
+  top: 199.5px;
+  left: 1268px;
+  width: 76.5px;
+  height: 14px;
+}
+.boundary-12 {
+  top: 199.5px;
+  left: 1364px;
+  width: 61px;
+  height: 14px;
+}
+.boundary-13 {
+  top: 199.5px;
+  left: 1444px;
+  width: 61px;
+  height: 14px;
+}
+.boundary-14 {
+  top: 199.5px;
+  left: 1523px;
+  width: 47px;
+  height: 14px;
+}
+.boundary-15 {
+  top: 199.5px;
+  left: 1587px;
+  width: 46px;
+  height: 14px;
+}
+.boundary-16 {
+  top: 199.5px;
+  left: 1651px;
+  width: 46px;
+  height: 14px;
+}
+.boundary-17 {
+  top: 199.5px;
+  left: 1715px;
+  width: 46px;
+  height: 14px;
+}
+.boundary-18 {
+  top: 199.5px;
+  left: 1779px;
+  width: 46px;
+  height: 14px;
+}
+.boundary-19 {
+  top: 199.5px;
+  left: 1843px;
+  width: 31px;
+  height: 14px;
+}
+.boundary-20 {
+  top: 199.5px;
+  left: 1891px;
+  width: 30px;
+  height: 14px;
+}
+.boundary-21 {
+  top: 199.5px;
+  left: 1939px;
+  width: 30px;
+  height: 14px;
+}
+.boundary-22 {
+  top: 199.5px;
+  left: 1987px;
+  width: 30px;
+  height: 14px;
+}
+.boundary-23 {
+  top: 199.5px;
+  left: 2034px;
+  width: 32px;
+  height: 14px;
+}
+
+.dots-instance {
+  top: 0%;
+  left: 0%;
+}

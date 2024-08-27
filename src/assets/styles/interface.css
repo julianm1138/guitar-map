@@ -1,0 +1,117 @@
+.hero {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+}
+
+h1 {
+  position: fixed;
+  margin: auto;
+  letter-spacing: 10px;
+  background: linear-gradient(
+    90deg,
+    #3c2008,
+    #744933
+  ); /* Shiny metallic gradient */
+  -webkit-background-clip: text; /* Ensures the gradient clips to the text */
+  -webkit-text-fill-color: transparent; /* Transparent fill to show the gradient */
+
+  font-size: 60px;
+  font-weight: bold;
+
+  /* Adding a slight shadow for depth */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.interface-container {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  height: 100vh; /* Full viewport height */
+  position: fixed;
+  top: 30%;
+  left: 45%;
+  height: 100vh;
+}
+
+button {
+  background: linear-gradient(145deg, #432809, #2c1d0e);
+  background: linear-gradient(90deg, #3c2008, #744933);
+  border: 1px solid #eedace;
+  color: #f8f3e3;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 10px; /* Rounded edges to mimic guitar curves */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Depth shadow for a premium feel */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+  font-family: "Verdana", sans-serif;
+  margin: 8px;
+  letter-spacing: 2px;
+  position: relative;
+  top: 5%;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #623c10, #2c1d0e);
+  box-shadow: 0 0 10px rgba(208, 206, 206, 0.8); /* Glowing effect */
+  transform: scale(1);
+}
+
+input {
+  position: relative;
+  top: 5%;
+  left: -13%;
+  background: linear-gradient(145deg, #271c12, #5a432f);
+  border: 2px solid #c49a6c;
+  color: #f8f3e3;
+  padding: 10px 20px;
+  height: 1.5rem;
+  width: 18rem;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.2s ease-in-out;
+  font-family: "Verdana", sans-serif;
+  letter-spacing: 2px;
+}
+
+input::placeholder {
+  color: #f8f3e3;
+
+  opacity: 0.2;
+  letter-spacing: 1px;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); /* Enhance shadow on focus */
+}
+
+input:hover {
+  box-shadow: 0 7px 17px rgba(0, 0, 0, 0.4); /* Increase shadow on hover */
+}
+
+.load-button {
+  position: fixed;
+  top: 38rem;
+  left: 693px;
+}
+.menu-load-button {
+  position: fixed;
+  top: 86%;
+  left: 688px;
+}
+.load-description {
+  position: fixed;
+  top: 89%;
+  right: 702px;
+}
+.switch-button {
+  position: fixed;
+  top: 82%;
+  right: 716px;
+}
