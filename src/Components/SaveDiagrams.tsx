@@ -11,19 +11,17 @@ const SaveDiagrams: React.FC<SaveDiagramsProps> = ({ onSave, onSwitch }) => {
   const [diagramName, setDiagramName] = useState<string>("");
   const [inputIsVisible, setInputIsVisible] = useState<boolean>(false);
 
-  // Toggles the visibility of the input field
   const toggleInputVisibility = () => {
     setInputIsVisible(!inputIsVisible);
   };
 
-  // Handles the save action
   const handleSave = () => {
     if (diagramName) {
       onSave(diagramName);
-      setDiagramName(""); // Clear input after saving
-      setInputIsVisible(false); // Hide input field after saving
+      setDiagramName("");
+      setInputIsVisible(false);
     } else {
-      alert("Please enter a diagram name."); // Prompt user if input is empty
+      alert("Please enter a diagram name.");
     }
   };
 

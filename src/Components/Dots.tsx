@@ -45,7 +45,6 @@ const DotToggle: React.FC<DotToggleProps> = ({ top, left }) => {
     const newIndex = Math.max(0, Math.min(23, currentIndex + direction));
     setFocusedIndex(newIndex);
 
-    // Focus the new element without scrolling
     if (refs.current[newIndex]) {
       refs.current[newIndex]?.focus({ preventScroll: true });
     }
