@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import Fretboard from "./Components/FretboardApp";
-import Dots from "./Components/Dots";
+import Fretboard from "./Components/Fretboard";
+import DotToggle from "./Components/Dots";
 import SaveDiagrams from "./Components/SaveDiagrams";
 import LoadDiagrams from "./Components/LoadDiagrams";
 
 import "./assets/styles/Fretboard.css";
-import "./assets/styles/interface.css";
+
 import "./index.css";
 
 // Define types for the diagrams
@@ -45,12 +45,12 @@ const App: React.FC = () => {
     <div className="hero">
       <h1>FretMap</h1>
       <Fretboard />
-      <Dots top="0px" left="0px" />
-      <Dots top="-54px" left="0px" />
-      <Dots top="-105px" left="0px" />
-      <Dots top="-156px" left="0px" />
-      <Dots top="-205px" left="0px" />
-      <Dots top="-257px" left="0px" />
+      <DotToggle top="0px" left="0px" />
+      <DotToggle top="-54px" left="0px" />
+      <DotToggle top="-105px" left="0px" />
+      <DotToggle top="-156px" left="0px" />
+      <DotToggle top="-205px" left="0px" />
+      <DotToggle top="-257px" left="0px" />
       {showSave ? (
         <SaveDiagrams onSave={handleSave} onSwitch={() => setShowSave(false)} />
       ) : (

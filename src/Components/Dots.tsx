@@ -15,7 +15,7 @@ const DotToggle: React.FC<DotToggleProps> = ({ top, left }) => {
     { name: string; dots: boolean[] }[]
   >([]);
   const boundaries = Array.from({ length: 24 }, (_, index) => index);
-  const refs = useRef<(HTMLDivElement | null)[]>([]);
+  const refs = useRef<(HTMLDivElement | null)[]>(Array(24).fill(null));
 
   const handleClick = (index: number) => {
     setDot((prevDot) => {
