@@ -5,7 +5,6 @@ import SaveDiagrams from "./Components/SaveDiagrams";
 import LoadDiagrams from "./Components/LoadDiagrams";
 
 import "./assets/styles/Fretboard.css";
-
 import "./index.css";
 
 // Define types for the diagrams
@@ -26,9 +25,8 @@ const App: React.FC = () => {
     const fetchUser = async () => {
       try {
         const response = await fetch("http://localhost:5000/secure", {
-          //client says: server, I need this stuff
           method: "GET",
-          credentials: "include", //request for cookies
+          credentials: "include", // Request for cookies
         });
         if (response.ok) {
           const data = await response.json();
@@ -44,24 +42,68 @@ const App: React.FC = () => {
     fetchUser();
   }, []);
 
-  const handleSave = (name: string) => {
-    // Save diagram logic
-    setSavedDiagrams((prevDiagrams) => [
-      ...prevDiagrams,
-      { name, dots: [...currentDiagram] },
-    ]);
+  const handleSave = async (name: string) => {
+    try {
+      const response = await fetch("http://localhost:5000/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, dots: currentDiagram }),
+        credentials: "include",
+      });
+      if (response.ok) {
+        console.log("Diagram saved successfully");
+        const savedData = await response.json();
+        setSavedDiagrams((prevDiagrams) => [...prevDiagrams, savedData]);
+      } else {
+        console.error("Failed to save diagram");
+      }
+    } catch (error) {
+      console.error("Error during save", error);
+    }
   };
 
-  const handleDelete = (index: number) => {
-    // Delete diagram logic
-    setSavedDiagrams((prevDiagrams) =>
-      prevDiagrams.filter((_, i) => i !== index)
-    );
+  const handleDelete = async (index: number) => {
+    try {
+      const diagramToDelete = savedDiagrams[index];
+      const response = await fetch(
+        `http://localhost:5000/delete/${diagramToDelete.name}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        console.log("Diagram deleted successfully");
+        setSavedDiagrams((prevDiagrams) =>
+          prevDiagrams.filter((_, i) => i !== index)
+        );
+      } else {
+        console.error("Failed to delete diagram");
+      }
+    } catch (error) {
+      console.error("Error during delete:", error);
+    }
   };
 
-  const handleLoad = (diagram: Diagram) => {
-    // Load diagram logic
-    setCurrentDiagram(diagram.dots);
+  const handleLoad = async (diagram: Diagram) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/load/${diagram.name}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setCurrentDiagram(data.dots);
+      } else {
+        console.error("Failed to load diagram");
+      }
+    } catch (error) {
+      console.error("Error during diagram load:", error);
+    }
   };
 
   return (
@@ -79,7 +121,7 @@ const App: React.FC = () => {
         <SaveDiagrams onSave={handleSave} onSwitch={() => setShowSave(false)} />
       ) : (
         <LoadDiagrams
-          savedDiagrams={savedDiagrams} // props can take state or functions
+          savedDiagrams={savedDiagrams}
           onDelete={handleDelete}
           onLoad={handleLoad}
           onSwitch={() => setShowSave(true)}

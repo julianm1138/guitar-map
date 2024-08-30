@@ -1,14 +1,29 @@
-import React from "react";
-
-import { useState } from "react";
+import React, { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/landing.css";
+
 function LandingPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    // Error handling for empty fields
+    if (!username && !password) {
+      setError("Both username and password are required.");
+      return;
+    } else if (!username) {
+      setError("Username is required.");
+      return;
+    } else if (!password) {
+      setError("Password is required.");
+      return;
+    } else {
+      setError("");
+    }
+
     try {
       const response = await fetch("http://localhost:5000/login", {
         method: "POST",
@@ -27,7 +42,21 @@ function LandingPage() {
     }
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!username && !password) {
+      setError("Both username and password are required.");
+      return;
+    } else if (!username) {
+      setError("Username is required.");
+      return;
+    } else if (!password) {
+      setError("Password is required.");
+      return;
+    } else {
+      setError("");
+    }
+
     try {
       const response = await fetch("http://localhost:5000/register", {
         method: "POST",
@@ -68,6 +97,7 @@ function LandingPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+        {error && <p className="login-error">{error}</p>}
         <div className="button-container">
           <button onClick={handleLogin}>Login</button>
           <button onClick={handleRegister}>Register</button>
@@ -76,4 +106,5 @@ function LandingPage() {
     </div>
   );
 }
+
 export default LandingPage;

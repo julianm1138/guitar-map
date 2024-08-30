@@ -18,6 +18,7 @@ const SaveDiagrams: React.FC<SaveDiagramsProps> = ({ onSave, onSwitch }) => {
   const handleSave = () => {
     if (diagramName) {
       onSave(diagramName);
+      console.log("Saving diagram with name:", diagramName);
       setDiagramName("");
       setInputIsVisible(false);
     } else {

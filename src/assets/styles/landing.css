@@ -64,3 +64,8 @@ body {
 .button-container button:hover {
   background-color: #0056b3;
 }
+
+.login-error {
+  color: red;
+  font-size: 0.875rem;
+}

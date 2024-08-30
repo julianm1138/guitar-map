@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -30,10 +7,8 @@ const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const dotenv = __importStar(require("dotenv"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const jwtUtils_1 = require("./jwtUtils");
-dotenv.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
     origin: "http://localhost:5173",
@@ -48,6 +23,7 @@ mongoose_1.default
     .connect(process.env.MONGO_URI)
     .then(() => console.log("Connected to MongoDB"))
     .catch((err) => console.error("Error connecting to MongoDB:", err));
+// Schemas
 const UserSchema = new mongoose_1.default.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true, unique: true },
@@ -55,6 +31,12 @@ const UserSchema = new mongoose_1.default.Schema({
     diagrams: [{ name: String, dots: [mongoose_1.default.Schema.Types.Mixed] }],
 });
 const User = mongoose_1.default.model("User", UserSchema);
+const DiagramSchema = new mongoose_1.default.Schema({
+    name: { type: String, required: true },
+    dots: [{ x: Number, y: Number }],
+    userId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: "User", required: true },
+});
+const Diagram = mongoose_1.default.model("Diagram", DiagramSchema);
 //client requests to register user to MongoDB
 app.post("/register", async (req, res) => {
     const { username, password } = req.body;
@@ -77,7 +59,7 @@ app.post("/register", async (req, res) => {
         console.error("Error with the server", error);
     }
 });
-//client requests to fetch user from MongoDB
+//Handle client requests to fetch user from MongoDB
 app.post("/login", async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -101,8 +83,44 @@ app.post("/login", async (req, res) => {
         console.error("Error fetching user data:", error);
     }
 });
+//process cookie data to send back to client
 app.get("/secure", jwtUtils_1.authenticateToken, (req, res) => {
     res.status(200).json({ message: "Protected data", user: req.user?.username });
+});
+// Receive fretboard diagrams to post to the database
+const router = express_1.default.Router();
+router.post("/save", jwtUtils_1.authenticateToken, async (req, res) => {
+    const { name, dots } = req.body;
+    const userId = req.user?.id;
+    if (!name || !dots || !userId) {
+        return res.status(400).json({ error: "Invalid data" });
+    }
+    try {
+        const newDiagram = new Diagram({ name, dots, userId });
+        await newDiagram.save();
+        res.status(201).json(newDiagram);
+        console.log("Diagram saved successfully");
+    }
+    catch (error) {
+        res.status(500).json({ error: "Error saving diagram" });
+        console.log("Error:", error);
+    }
+});
+//receieve request from client to send the saved diagram back to the user
+router.get("/load", jwtUtils_1.authenticateToken, async (req, res) => {
+    const userId = req.user?.id;
+    if (!userId) {
+        return res.status(400).json({ error: "User not authenticated" });
+    }
+    try {
+        const diagrams = await Diagram.find({ userId });
+        res.status(200).json(diagrams);
+        console.log("Here is the diagram");
+    }
+    catch (error) {
+        res.status(500).json({ error: "Error loading diagram" });
+        console.log(error);
+    }
 });
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

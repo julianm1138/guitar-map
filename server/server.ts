@@ -2,11 +2,9 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
-import * as dotenv from "dotenv";
+
 import cookieParser from "cookie-parser";
 import { generateToken, authenticateToken } from "./jwtUtils";
-
-dotenv.config();
 
 const app = express();
 
@@ -28,6 +26,7 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Error connecting to MongoDB:", err));
 
+// Schemas
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true, unique: true },
@@ -36,6 +35,14 @@ const UserSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model("User", UserSchema);
+
+const DiagramSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  dots: [{ x: Number, y: Number }],
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+});
+
+const Diagram = mongoose.model("Diagram", DiagramSchema);
 
 //client requests to register user to MongoDB
 app.post("/register", async (req: Request, res: Response) => {
@@ -61,7 +68,7 @@ app.post("/register", async (req: Request, res: Response) => {
   }
 });
 
-//client requests to fetch user from MongoDB
+//Handle client requests to fetch user from MongoDB
 app.post("/login", async (req: Request, res: Response) => {
   const { username, password } = req.body;
   try {
@@ -85,8 +92,48 @@ app.post("/login", async (req: Request, res: Response) => {
     console.error("Error fetching user data:", error);
   }
 });
+
+//process cookie data to send back to client
 app.get("/secure", authenticateToken, (req: Request, res: Response) => {
   res.status(200).json({ message: "Protected data", user: req.user?.username });
+});
+
+// Receive fretboard diagrams to post to the database
+const router = express.Router();
+
+router.post("/save", authenticateToken, async (req, res) => {
+  const { name, dots } = req.body;
+  const userId = req.user?.id;
+
+  if (!name || !dots || !userId) {
+    return res.status(400).json({ error: "Invalid data" });
+  }
+  try {
+    const newDiagram = new Diagram({ name, dots, userId });
+    await newDiagram.save();
+    res.status(201).json(newDiagram);
+    console.log("Diagram saved successfully");
+  } catch (error) {
+    res.status(500).json({ error: "Error saving diagram" });
+    console.log("Error:", error);
+  }
+});
+
+//receieve request from client to send the saved diagram back to the user
+router.get("/load", authenticateToken, async (req, res) => {
+  const userId = req.user?.id;
+  if (!userId) {
+    return res.status(400).json({ error: "User not authenticated" });
+  }
+
+  try {
+    const diagrams = await Diagram.find({ userId });
+    res.status(200).json(diagrams);
+    console.log("Here is the diagram");
+  } catch (error) {
+    res.status(500).json({ error: "Error loading diagram" });
+    console.log(error);
+  }
 });
 
 const PORT = process.env.PORT || 5000;
