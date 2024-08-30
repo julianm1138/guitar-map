@@ -1,4 +1,5 @@
 import React from "react";
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/landing.css";
@@ -13,6 +14,7 @@ function LandingPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
+        credentials: "include",
       });
       if (response.ok) {
         // Navigate to the main app if login is successful
@@ -31,6 +33,7 @@ function LandingPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
+        credentials: "include",
       });
       if (response.ok) {
         // Navigate to the main app if registration is successful

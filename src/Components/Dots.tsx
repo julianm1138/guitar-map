@@ -1,7 +1,6 @@
 import React, { useState, useRef, MutableRefObject } from "react";
 import "../assets/styles/Fretboard.css";
 
-// Define types for the props
 interface DotToggleProps {
   top: string;
   left: string;

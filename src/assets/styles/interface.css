@@ -115,3 +115,24 @@ input:hover {
   top: 82%;
   right: 716px;
 }
+
+.user-display {
+  position: fixed;
+  top: 12px;
+  left: 18px;
+  margin: auto;
+  letter-spacing: 5px;
+  background: linear-gradient(
+    90deg,
+    #3c2008,
+    #744933
+  ); /* Shiny metallic gradient */
+  -webkit-background-clip: text; /* Ensures the gradient clips to the text */
+  -webkit-text-fill-color: transparent; /* Transparent fill to show the gradient */
+
+  font-size: 30px;
+  font-weight: bold;
+
+  /* Adding a slight shadow for depth */
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+}

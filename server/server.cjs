@@ -1,7 +1,4 @@
 "use strict";
-const dotenv = require("dotenv");
-dotenv.config();
-
 var __createBinding =
   (this && this.__createBinding) ||
   (Object.create
@@ -56,20 +53,21 @@ const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const mongoURI = process.env.MONGO_URI;
-if (!mongoURI) {
-  console.error("MongoDB URI is not defined");
-  process.exit(1);
-}
-
-mongoose_1.default
-  .connect(mongoURI)
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("Error connecting to MongoDB:", err));
-
+const dotenv = __importStar(require("dotenv"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const jwtUtils_1 = require("./jwtUtils");
+dotenv.config();
 const app = (0, express_1.default)();
+app.use(
+  (0, cors_1.default)({
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+app.use((0, cookie_parser_1.default)());
 app.use(body_parser_1.default.json());
-app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 mongoose_1.default
   .connect(process.env.MONGO_URI)
@@ -88,7 +86,16 @@ app.post("/register", async (req, res) => {
   try {
     const newUser = new User({ username, password });
     await newUser.save();
-    res.status(201).json({ message: "User successfully registered!" });
+    const token = (0, jwtUtils_1.generateToken)(username);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+    res.status(201).json({
+      message: "User successfully registered!",
+      user: newUser.username,
+    });
   } catch (error) {
     res.status(400).json({ error: "Error encountered with registering user" });
     console.error("Error with the server", error);
@@ -105,11 +112,20 @@ app.post("/login", async (req, res) => {
     if (user.password !== password) {
       return res.status(401).json({ message: "Incorrect password" });
     }
+    const token = (0, jwtUtils_1.generateToken)(username);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: "Server error" });
     console.error("Error fetching user data:", error);
   }
+});
+app.get("/secure", jwtUtils_1.authenticateToken, (req, res) => {
+  res.status(200).json({ message: "Protected data", user: req.user?.username });
 });
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
