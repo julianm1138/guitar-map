@@ -10,7 +10,7 @@ dotenv_1.default.config();
 const SECRET_KEY = process.env.SECRET_KEY;
 //generate JWT token
 const generateToken = (username) => {
-    return jsonwebtoken_1.default.sign({ username }, SECRET_KEY, { expiresIn: "1h" });
+    return jsonwebtoken_1.default.sign({ username }, SECRET_KEY, { expiresIn: "2h" });
 };
 exports.generateToken = generateToken;
 //authenticate requests middleware

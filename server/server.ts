@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
-
 import cookieParser from "cookie-parser";
 import { generateToken, authenticateToken } from "./jwtUtils";
 
@@ -70,7 +69,7 @@ app.post("/register", async (req: Request, res: Response) => {
 
 //Handle client requests to fetch user from MongoDB
 app.post("/login", async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+  const { username, password } = req.body; //Destructure client data
   try {
     const user = await User.findOne({ username });
     if (!user) {
@@ -99,9 +98,9 @@ app.get("/secure", authenticateToken, (req: Request, res: Response) => {
 });
 
 // Receive fretboard diagrams to post to the database
-const router = express.Router();
 
-router.post("/save", authenticateToken, async (req, res) => {
+app.post("/save", authenticateToken, async (req, res) => {
+  console.log("test");
   const { name, dots } = req.body;
   const userId = req.user?.id;
 
@@ -120,7 +119,7 @@ router.post("/save", authenticateToken, async (req, res) => {
 });
 
 //receieve request from client to send the saved diagram back to the user
-router.get("/load", authenticateToken, async (req, res) => {
+app.get("/load", authenticateToken, async (req: Request, res: Response) => {
   const userId = req.user?.id;
   if (!userId) {
     return res.status(400).json({ error: "User not authenticated" });
@@ -136,6 +135,37 @@ router.get("/load", authenticateToken, async (req, res) => {
   }
 });
 
+// Delete diagram by ID
+app.delete(
+  "/delete",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(400).json({ error: "User not authenticated" });
+    }
+
+    try {
+      const result = await Diagram.deleteOne({ _id: id, userId });
+      if (result.deletedCount === 0) {
+        return res
+          .status(404)
+          .json({ error: "Diagram not found or unauthorized" });
+      }
+      res.status(200).json({ message: "Diagram deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ error: "Error deleting diagram" });
+      console.error("Error:", error);
+    }
+  }
+);
+
+app.get("/test-token", authenticateToken, (req: Request, res: Response) => {
+  res.status(200).json({ message: "Token is valid", user: req.user });
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
@@ -143,8 +173,3 @@ app.listen(PORT, () => {
 });
 
 const SECRET_KEY = process.env.SECRET_KEY as string;
-console.log("SECRET_KEY:", SECRET_KEY);
-
-if (!SECRET_KEY) {
-  throw new Error("SECRET_KEY is not defined");
-}

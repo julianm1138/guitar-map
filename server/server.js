@@ -61,7 +61,7 @@ app.post("/register", async (req, res) => {
 });
 //Handle client requests to fetch user from MongoDB
 app.post("/login", async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password } = req.body; //Destructure client data
     try {
         const user = await User.findOne({ username });
         if (!user) {
@@ -88,8 +88,8 @@ app.get("/secure", jwtUtils_1.authenticateToken, (req, res) => {
     res.status(200).json({ message: "Protected data", user: req.user?.username });
 });
 // Receive fretboard diagrams to post to the database
-const router = express_1.default.Router();
-router.post("/save", jwtUtils_1.authenticateToken, async (req, res) => {
+app.post("/save", jwtUtils_1.authenticateToken, async (req, res) => {
+    console.log("test");
     const { name, dots } = req.body;
     const userId = req.user?.id;
     if (!name || !dots || !userId) {
@@ -107,7 +107,7 @@ router.post("/save", jwtUtils_1.authenticateToken, async (req, res) => {
     }
 });
 //receieve request from client to send the saved diagram back to the user
-router.get("/load", jwtUtils_1.authenticateToken, async (req, res) => {
+app.get("/load", jwtUtils_1.authenticateToken, async (req, res) => {
     const userId = req.user?.id;
     if (!userId) {
         return res.status(400).json({ error: "User not authenticated" });
@@ -122,12 +122,32 @@ router.get("/load", jwtUtils_1.authenticateToken, async (req, res) => {
         console.log(error);
     }
 });
+// Delete diagram by ID
+app.delete("/delete", jwtUtils_1.authenticateToken, async (req, res) => {
+    const { id } = req.params;
+    const userId = req.user?.id;
+    if (!userId) {
+        return res.status(400).json({ error: "User not authenticated" });
+    }
+    try {
+        const result = await Diagram.deleteOne({ _id: id, userId });
+        if (result.deletedCount === 0) {
+            return res
+                .status(404)
+                .json({ error: "Diagram not found or unauthorized" });
+        }
+        res.status(200).json({ message: "Diagram deleted successfully" });
+    }
+    catch (error) {
+        res.status(500).json({ error: "Error deleting diagram" });
+        console.error("Error:", error);
+    }
+});
+app.get("/test-token", jwtUtils_1.authenticateToken, (req, res) => {
+    res.status(200).json({ message: "Token is valid", user: req.user });
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`);
 });
 const SECRET_KEY = process.env.SECRET_KEY;
-console.log("SECRET_KEY:", SECRET_KEY);
-if (!SECRET_KEY) {
-    throw new Error("SECRET_KEY is not defined");
-}

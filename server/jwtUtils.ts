@@ -1,12 +1,13 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
 import { Request, Response, NextFunction } from "express";
+
 dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY as string;
 
 //generate JWT token
 export const generateToken = (username: string) => {
-  return jwt.sign({ username }, SECRET_KEY, { expiresIn: "1h" });
+  return jwt.sign({ username }, SECRET_KEY, { expiresIn: "2h" });
 };
 
 //authenticate requests middleware

@@ -30,6 +30,7 @@ const App: React.FC = () => {
         });
         if (response.ok) {
           const data = await response.json();
+          console.log("Fetched user data:", data);
           setUser(data.user);
           console.log("Fetched user:", data.username);
         } else {
@@ -65,13 +66,10 @@ const App: React.FC = () => {
   const handleDelete = async (index: number) => {
     try {
       const diagramToDelete = savedDiagrams[index];
-      const response = await fetch(
-        `http://localhost:5000/delete/${diagramToDelete.name}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`http://localhost:5000/delete`, {
+        method: "DELETE",
+        credentials: "include",
+      });
 
       if (response.ok) {
         console.log("Diagram deleted successfully");
@@ -88,13 +86,10 @@ const App: React.FC = () => {
 
   const handleLoad = async (diagram: Diagram) => {
     try {
-      const response = await fetch(
-        `http://localhost:5000/load/${diagram.name}`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
+      const response = await fetch("http://localhost:5000/load", {
+        method: "GET",
+        credentials: "include",
+      });
       if (response.ok) {
         const data = await response.json();
         setCurrentDiagram(data.dots);
