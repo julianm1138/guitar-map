@@ -14,6 +14,6 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "server/jwtUtils.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "server/sessionStorage.ts"],
   "exclude": ["node_modules", "dist"]
 }

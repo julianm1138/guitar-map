@@ -1,9 +1,9 @@
-import { JwtPayload } from "jsonwebtoken";
+// express-session.d.ts
+import "express-session";
+import { ObjectId } from "mongoose";
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: JwtPayload;
-    }
+declare module "express-session" {
+  interface SessionData {
+    user: { id: string | ObjectId; username: string };
   }
 }

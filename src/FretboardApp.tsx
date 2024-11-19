@@ -14,7 +14,7 @@ interface Diagram {
 }
 
 const App: React.FC = () => {
-  const [user, setUser] = useState<string>("");
+  const [user, setUser] = useState<string | null>(null);
   const [showSave, setShowSave] = useState<boolean>(true);
   const [savedDiagrams, setSavedDiagrams] = useState<Diagram[]>([]);
   const [currentDiagram, setCurrentDiagram] = useState<
@@ -30,9 +30,7 @@ const App: React.FC = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log("Fetched user data:", data);
-          setUser(data.user);
-          console.log("Fetched user:", data.username);
+          setUser(data.user?.username || null); // Adjust based on server response
         } else {
           console.error("Failed to fetch user data");
         }
