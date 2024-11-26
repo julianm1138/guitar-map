@@ -29,11 +29,11 @@ mongoose_1.default
 app.use((0, morgan_1.default)("tiny"));
 // Session middleware configuration
 app.use((0, express_session_1.default)({
-    secret: process.env.SECRET_KEY || "supersecretkey", // Use a strong secret key
+    secret: process.env.SECRET_KEY || "supersecretkey",
     resave: false,
     saveUninitialized: false,
     store: connect_mongo_1.default.create({
-        mongoUrl: process.env.MONGO_URI, // Use the same MongoDB URI
+        mongoUrl: process.env.MONGO_URI,
         ttl: 14 * 24 * 60 * 60, // 14 days session expiration
     }),
     cookie: {
@@ -150,7 +150,8 @@ app.post("/logout", (req, res) => {
         res.status(200).json({ message: "Logged out successfully" });
     });
 });
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+const PORT = Number(process.env.PORT) || 5000;
+const HOST = "0.0.0.0";
+app.listen(PORT, HOST, () => {
+    console.log(`Server is running on port ${HOST}:${PORT}`);
 });
