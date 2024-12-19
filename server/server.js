@@ -110,7 +110,7 @@ app.get("/secure", isAuthenticated, (req, res) => {
     }
 });
 // Save Diagram
-app.post("/save", isAuthenticated, async (req, res) => {
+app.post("/save", async (req, res) => {
     const { name, dots } = req.body;
     const userId = req.session.user?.id;
     if (!name || !dots || !userId) {
@@ -126,6 +126,7 @@ app.post("/save", isAuthenticated, async (req, res) => {
         res.status(500).json({ error: "Error saving diagram" });
         console.log("Error:", error);
     }
+    console.log("testing save route");
 });
 // Load Diagrams
 app.get("/load", isAuthenticated, async (req, res) => {

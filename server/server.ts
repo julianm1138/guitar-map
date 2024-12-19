@@ -150,6 +150,7 @@ app.post(
       res.status(500).json({ error: "Error saving diagram" });
       console.log("Error:", error);
     }
+    console.log("testing save route");
   }
 );
 
