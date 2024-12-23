@@ -12,7 +12,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://127.0.0.1:5173",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -134,6 +134,8 @@ app.post(
   "/save",
   isAuthenticated,
   async (req: Request & { session: any }, res: Response) => {
+    console.log("testing save route");
+    res.status(200).json({ message: "diagram save successful" });
     const { name, dots } = req.body;
     const userId = req.session.user?.id;
 

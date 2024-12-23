@@ -14,7 +14,7 @@ const morgan_1 = __importDefault(require("morgan"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: "http://localhost:5173",
+    origin: "http://127.0.0.1:5173",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -110,7 +110,9 @@ app.get("/secure", isAuthenticated, (req, res) => {
     }
 });
 // Save Diagram
-app.post("/save", async (req, res) => {
+app.post("/save", isAuthenticated, async (req, res) => {
+    console.log("testing save route");
+    res.status(200).json({ message: "diagram save successful" });
     const { name, dots } = req.body;
     const userId = req.session.user?.id;
     if (!name || !dots || !userId) {
