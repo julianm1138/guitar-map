@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import bodyParser from "body-parser";
+
 import cors from "cors";
 import mongoose from "mongoose";
 import session from "express-session"; // For session management
@@ -12,14 +12,13 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://127.0.0.1:5173",
+    origin: "http://localhost:5173",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-app.use(bodyParser.json());
 app.use(express.json());
 
 // Connect to MongoDB
@@ -72,6 +71,8 @@ function isAuthenticated(
   res: Response,
   next: NextFunction
 ) {
+  console.log("Session contents:", req.session);
+
   if (req.session.user) {
     next();
   } else {
@@ -132,27 +133,27 @@ app.get("/secure", isAuthenticated, (req: Request, res: Response) => {
 // Save Diagram
 app.post(
   "/save",
-  isAuthenticated,
+  // isAuthenticated,
   async (req: Request & { session: any }, res: Response) => {
     console.log("testing save route");
+
     res.status(200).json({ message: "diagram save successful" });
-    const { name, dots } = req.body;
-    const userId = req.session.user?.id;
+    // const { name, dots } = req.body;
+    // const userId = req.session.user?.id;
 
-    if (!name || !dots || !userId) {
-      return res.status(400).json({ error: "Invalid data" });
-    }
+    // if (!name || !dots || !userId) {
+    //   return res.status(400).json({ error: "Invalid data" });
+    // }
 
-    try {
-      const newDiagram = new Diagram({ name, dots, userId });
-      await newDiagram.save();
-      res.status(201).json(newDiagram);
-      console.log("Diagram saved successfully");
-    } catch (error) {
-      res.status(500).json({ error: "Error saving diagram" });
-      console.log("Error:", error);
-    }
-    console.log("testing save route");
+    // try {
+    //   const newDiagram = new Diagram({ name, dots, userId });
+    //   await newDiagram.save();
+    //   res.status(201).json(newDiagram);
+    //   console.log("Diagram saved successfully");
+    // } catch (error) {
+    //   res.status(500).json({ error: "Error saving diagram" });
+    //   console.log("Error:", error);
+    // }
   }
 );
 
@@ -185,8 +186,8 @@ app.post("/logout", (req: Request & { session: any }, res: Response) => {
   });
 });
 
-const PORT = Number(process.env.PORT) || 5000;
-const HOST = "0.0.0.0";
+const PORT = Number(process.env.PORT) || 8000;
+const HOST = "localhost";
 app.listen(PORT, HOST, () => {
   console.log(`Server is running on port ${HOST}:${PORT}`);
 });

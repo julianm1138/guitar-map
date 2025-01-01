@@ -55,7 +55,7 @@ const cors_1 = __importDefault(require("cors"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv = __importStar(require("dotenv"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const jwtUtils_1 = require("./jwtUtils");
+
 dotenv.config();
 const app = (0, express_1.default)();
 app.use(
@@ -86,12 +86,7 @@ app.post("/register", async (req, res) => {
   try {
     const newUser = new User({ username, password });
     await newUser.save();
-    const token = (0, jwtUtils_1.generateToken)(username);
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
+
     res.status(201).json({
       message: "User successfully registered!",
       user: newUser.username,
@@ -112,22 +107,17 @@ app.post("/login", async (req, res) => {
     if (user.password !== password) {
       return res.status(401).json({ message: "Incorrect password" });
     }
-    const token = (0, jwtUtils_1.generateToken)(username);
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
+
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: "Server error" });
     console.error("Error fetching user data:", error);
   }
 });
-app.get("/secure", jwtUtils_1.authenticateToken, (req, res) => {
+app.get("/secure", (req, res) => {
   res.status(200).json({ message: "Protected data", user: req.user?.username });
 });
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
 });

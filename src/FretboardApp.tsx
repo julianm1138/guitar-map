@@ -24,7 +24,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:5000/secure", {
+        const response = await fetch("http://localhost:8000/secure", {
           method: "GET",
           credentials: "include", // Request for cookies
         });
@@ -43,7 +43,7 @@ const App: React.FC = () => {
 
   const handleSave = async (name: string) => {
     try {
-      const response = await fetch("http://localhost:5000/save", {
+      const response = await fetch("http://localhost:8000/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, dots: currentDiagram }),
@@ -64,7 +64,7 @@ const App: React.FC = () => {
   const handleDelete = async (index: number) => {
     try {
       const diagramToDelete = savedDiagrams[index];
-      const response = await fetch(`http://localhost:5000/delete`, {
+      const response = await fetch(`http://localhost:8000/delete`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -84,7 +84,7 @@ const App: React.FC = () => {
 
   const handleLoad = async (diagram: Diagram) => {
     try {
-      const response = await fetch("http://localhost:5000/load", {
+      const response = await fetch("http://localhost:8000/load", {
         method: "GET",
         credentials: "include",
       });

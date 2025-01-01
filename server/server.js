@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const express_session_1 = __importDefault(require("express-session")); // For session management
@@ -14,12 +13,11 @@ const morgan_1 = __importDefault(require("morgan"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: "http://127.0.0.1:5173",
+    origin: "http://localhost:5173",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
-app.use(body_parser_1.default.json());
 app.use(express_1.default.json());
 // Connect to MongoDB
 mongoose_1.default
@@ -58,6 +56,7 @@ const DiagramSchema = new mongoose_1.default.Schema({
 const Diagram = mongoose_1.default.model("Diagram", DiagramSchema);
 // Middleware to ensure user is authenticated
 function isAuthenticated(req, res, next) {
+    console.log("Session contents:", req.session);
     if (req.session.user) {
         next();
     }
@@ -110,25 +109,25 @@ app.get("/secure", isAuthenticated, (req, res) => {
     }
 });
 // Save Diagram
-app.post("/save", isAuthenticated, async (req, res) => {
+app.post("/save", 
+// isAuthenticated,
+async (req, res) => {
     console.log("testing save route");
     res.status(200).json({ message: "diagram save successful" });
-    const { name, dots } = req.body;
-    const userId = req.session.user?.id;
-    if (!name || !dots || !userId) {
-        return res.status(400).json({ error: "Invalid data" });
-    }
-    try {
-        const newDiagram = new Diagram({ name, dots, userId });
-        await newDiagram.save();
-        res.status(201).json(newDiagram);
-        console.log("Diagram saved successfully");
-    }
-    catch (error) {
-        res.status(500).json({ error: "Error saving diagram" });
-        console.log("Error:", error);
-    }
-    console.log("testing save route");
+    // const { name, dots } = req.body;
+    // const userId = req.session.user?.id;
+    // if (!name || !dots || !userId) {
+    //   return res.status(400).json({ error: "Invalid data" });
+    // }
+    // try {
+    //   const newDiagram = new Diagram({ name, dots, userId });
+    //   await newDiagram.save();
+    //   res.status(201).json(newDiagram);
+    //   console.log("Diagram saved successfully");
+    // } catch (error) {
+    //   res.status(500).json({ error: "Error saving diagram" });
+    //   console.log("Error:", error);
+    // }
 });
 // Load Diagrams
 app.get("/load", isAuthenticated, async (req, res) => {
@@ -153,8 +152,8 @@ app.post("/logout", (req, res) => {
         res.status(200).json({ message: "Logged out successfully" });
     });
 });
-const PORT = Number(process.env.PORT) || 5000;
-const HOST = "0.0.0.0";
+const PORT = Number(process.env.PORT) || 8000;
+const HOST = "localhost";
 app.listen(PORT, HOST, () => {
     console.log(`Server is running on port ${HOST}:${PORT}`);
 });
