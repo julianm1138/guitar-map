@@ -1,0 +1,19 @@
+Functional components must be specified on import and the name of the file is the path to that functional component (their names can be different).
+
+The server starts with routes and then we communicate with the frontend using await fetch
+
+Render gets traced back to the state, which then gets traced back to the function, the function communicates with the server.
+
+To Do List:
+- Add a {user} icon on the client's /app path.
+- Add the ability to logout
+- Add functionality for diagrams to save and load
+
+Troubleshooting:
+
+- Sometimes the problem is that between multiple files and imports/exports, you will forget to import some module that needs to be present in another module. For example, the dotenv module needed to be present in the same file you were using JWT. And they need to be present because JWT is needed to access the database securely, and dotenv is needed because it holds the secret key
+
+Problems:
+
+1. Secure is pending
+2. Save is 404 yet login is 200 OK
