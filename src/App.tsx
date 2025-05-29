@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Fretboard from "./components/Fretboard";
 import LandingPage from "./components/LandingPage";
-import SaveDiagramButton from "./components/saveDiagramButton";
+import SaveDiagramButton from "./components/SaveDiagramButton";
 import DiagramList from "./components/DiagramList";
 import { useState } from "react";
 import Header from "./components/Header";
