@@ -27,7 +27,7 @@ export default function DiagramList({ onLoadDiagram }: Props) {
       <div className="flex-1 overflow-y-auto h-full px-8 py-3 space-y-5 text-2xl">
         {diagrams.length === 0 ? (
           <div className="flex justify-center h-full items-center text-gray-400 text-3xl">
-            No diagrams present
+            No diagrams saved
           </div>
         ) : (
           diagrams.map((d) => (
@@ -37,7 +37,7 @@ export default function DiagramList({ onLoadDiagram }: Props) {
             >
               <span>
                 {(d.name || "Unnamed Diagram").slice(0, 20)}
-                {d.name?.length > 9 ? "…" : ""}
+                {d.name?.length && d.name.length > 9 ? "…" : ""}
               </span>
               <div className="flex gap-12">
                 <button

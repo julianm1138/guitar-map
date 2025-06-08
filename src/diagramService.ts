@@ -20,6 +20,6 @@ export const loadDiagrams = async () => {
     .eq("user_id", user.data.user?.id);
 };
 
-export const deleteDiagram = async (id: number) => {
+export const deleteDiagram = async (id: string) => {
   return supabase.from("diagrams").delete().eq("id", id);
 };
